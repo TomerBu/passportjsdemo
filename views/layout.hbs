@@ -7,6 +7,27 @@
     <link rel='stylesheet' href='/stylesheets/style.css' />
   </head>
   <body>
-    {{{body}}}
+
+	  {{#if user}}
+	  	<p class="navbar-text">
+	    	<strong>Hi,</strong>{{user.username}}
+	    </p>
+	  {{/if}}
+	  
+	  {{#if error}}
+	    <p class="alert alert-warning">{{error}}</p>
+	  {{/if}}
+
+	  {{#if success}}
+	    <p class="alert alert-success">{{success}}</p>
+	  {{/if}}
+
+	  {{#if notice}}
+	    <p class="alert alert-info">{{notice}}</p>
+	  {{/if}}
+
+
+
+	  {{{body}}}
   </body>
 </html>
