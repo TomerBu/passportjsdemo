@@ -1,6 +1,6 @@
 module.exports = function(passport){
 
-	var mongoose = require('mongoose'); //this will use the connection.
+	var mongoose = require('mongoose'); //this will use the connection, no need to connect again.
 	var LocalStrategy = require('passport-local').Strategy;
 
 	var userSchema = mongoose.Schema({
@@ -26,7 +26,7 @@ module.exports = function(passport){
 
 	passport.use('local-signup', new LocalStrategy({passReqToCallback:true},
 	 (req, username, password, done)=>{
-	 	process.nextTick(()=>{
+	 	process.nextTick(()=>{ //without this, it will not work
 	 		User.findOne({username:username}, (err, user)=>{
 	 			if (err) {return done(err)}
 	 			if (user) {
@@ -47,4 +47,15 @@ module.exports = function(passport){
 	 		});
 	 	});
 	 }));
+
+	passport.use('local-login', new LocalStrategy({passReqToCallback:true}, 
+		(req, username, password, done)=>{
+			User.findOne({username:username}, (err, user)=>{
+				if (err) {return done(err);}
+				if (!user) {return done(null, false);}
+				if (!(user.password === password)) {return done(null, false);}
+				return done(null, user);
+			});
+		}
+	));
 }
