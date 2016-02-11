@@ -8,7 +8,7 @@ var mongoose = require('mongoose');
 var passport = require('passport');
 var flash = require('connect-flash');
 var session = require('express-session');
-
+var MongoStore = require('connect-mongo')(session);
 var config = require('./config/config.js');
 var routes = require('./routes/index')(passport);
 var auth = require('./auth/auth-passport.js')(passport);
@@ -39,7 +39,11 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //next we hook up the session:
-app.use(session({secret:config.secret, resave:false, saveUninitialized:false}));
+app.use(session({secret:config.secret,
+                resave:false,
+                saveUninitialized:false,
+                store: new MongoStore({ mongooseConnection: mongoose.connection })
+              }));
 //hook up passport (uses session)
 app.use(passport.initialize());
 app.use(passport.session()); //persist the logins to session
