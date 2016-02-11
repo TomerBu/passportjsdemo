@@ -8,26 +8,31 @@
   </head>
   <body>
 
-	  {{#if user}}
-	  	<p class="navbar-text">
-	    	<strong>Hi,</strong>{{user.username}}
-	    </p>
-	  {{/if}}
+	{{#if user}}
+	  <p class="navbar-text">
+	   	<strong>Hi,</strong>{{user.username}}
+	  </p>
+	{{/if}}
+
+    {{#if message}}
+        <p class="alert alert-success">imessage: {{message}}</p>
+    {{/if}}
+
 	  
-	  {{#if error}}
-	    <p class="alert alert-warning">{{error}}</p>
-	  {{/if}}
+	{{#if error}}
+	  <p class="alert alert-warning">ierror: {{error}}</p>
+	{{/if}}
 
-	  {{#if success}}
-	    <p class="alert alert-success">{{success}}</p>
-	  {{/if}}
+	{{#if success}}
+	  <p class="alert alert-success">isuccess: {{success}}</p>
+	{{/if}}
 
-	  {{#if notice}}
-	    <p class="alert alert-info">{{notice}}</p>
-	  {{/if}}
+	{{#if notice}}
+	  <p class="alert alert-info">inotice: {{notice}}</p>
+	{{/if}}
 
 
 
-	  {{{body}}}
+	{{{body}}}
   </body>
 </html>
