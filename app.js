@@ -49,22 +49,22 @@ app.use(passport.initialize());
 app.use(passport.session()); //persist the logins to session
 
 
-// Session-persisted message middleware
-app.use(function(req, res, next){
-  var err = req.session.error,
-      msg = req.session.notice,
-      success = req.session.success;
+// // Session-persisted message middleware
+// app.use(function(req, res, next){
+//   var err = req.session.error,
+//       msg = req.session.notice,
+//       success = req.session.success;
 
-  delete req.session.error;
-  delete req.session.success;
-  delete req.session.notice;
+//   delete req.session.error;
+//   delete req.session.success;
+//   delete req.session.notice;
 
-  if (err) res.locals.error = err;
-  if (msg) res.locals.notice = msg;
-  if (success) res.locals.success = success;
+//   if (err) res.locals.error = err;
+//   if (msg) res.locals.notice = msg;
+//   if (success) res.locals.success = success;
 
-  next();
-});
+//   next();
+// });
 
 
 //enable flash

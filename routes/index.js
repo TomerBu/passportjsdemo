@@ -5,15 +5,15 @@ module.exports = function(passport){
 
 	/* GET home page. */
 	router.get('/', function(req, res, next) {
-	  res.render('index', { title: 'Express' });
+	  res.render('index', { title: 'Hi, There', message:req.flash('info') });
 	});
 
 	router.get('/login', (req, res)=>{
-		res.render('login', {message:'login'});
+		res.render('login', {message:req.flash('info')});
 	});
 
 	router.get('/signup', (req, res)=>{
-		res.render('signup', {message:'signup'});
+		res.render('signup', {message:req.flash('info')});
 	});
 
 	// process the signup form
@@ -38,8 +38,11 @@ module.exports = function(passport){
 	    if (req.isAuthenticated())
 	        return next();
 	    // if they aren't redirect them to the home page
-	    req.session.error = 'Not Logged In!, can\'t see profile'
-	    res.redirect('/');
+	    //req.session.error = 'Not Logged In!, can\'t see profile'
+	    req.flash('info', 'Not Logged In!, Can\'t see profile');
+	    req.session.save(()=>{
+	    	res.redirect('/');
+		});
 	}
 	//protected route using the isLoggedIn middleware
     router.get('/profile', isLoggedIn, function(req, res) {
@@ -49,9 +52,12 @@ module.exports = function(passport){
     });
 
     router.get('/logout', function(req, res) {
-    	req.session.notice = 'Logged you out';
-        req.logout();
-        res.redirect('/');
+    	req.flash('info','Logged you out');
+    	req.logout();
+    	req.session.save(()=>{
+	        res.redirect('/');
+    	});
+
     });
 
 

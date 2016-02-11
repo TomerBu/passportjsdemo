@@ -30,7 +30,7 @@ module.exports = function(passport){
 	 		User.findOne({username:username}, (err, user)=>{
 	 			if (err) {return done(err)}
 	 			if (user) {
-	 				return done(null, false);
+	 				return done(null, false, req.flash('info', 'This username is already taken'));
 	 			}
 	 			else{
 	 				var user = new User();
@@ -52,8 +52,8 @@ module.exports = function(passport){
 		(req, username, password, done)=>{
 			User.findOne({username:username}, (err, user)=>{
 				if (err) {return done(err);}
-				if (!user) {return done(null, false);}
-				if (!(user.password === password)) {return done(null, false);}
+				if (!user) {return done(null, false, req.flash('info', 'No Such User!'));}
+				if (!(user.password === password)) {return done(null, false ,req.flash('info','Wrong Password... Try Again? :)'));}
 				return done(null, user);
 			});
 		}
