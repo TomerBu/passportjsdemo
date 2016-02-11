@@ -2,12 +2,25 @@ module.exports = function(passport){
 
 	var mongoose = require('mongoose'); //this will use the connection, no need to connect again.
 	var LocalStrategy = require('passport-local').Strategy;
+	var bcrypt = require('bcrypt'); //encryption
 
 	var userSchema = mongoose.Schema({
 	  username:String, 
 	  password:String, 
 	  email:String
 	});
+
+	//generate an encrypted password (using the bcrypt hash function)
+	userSchema.methods.hash = function(password) {
+		var salt = bcrypt.genSaltSync(10);
+		var hash = bcrypt.hashSync(password, salt);
+	    return hash
+	};
+
+	// Test if a password is valid:
+	userSchema.methods.isValidPassword = function(password) {
+	    return bcrypt.compareSync(password, this.password);
+	};
 
 
 	var User = mongoose.model('users', userSchema);
@@ -35,7 +48,7 @@ module.exports = function(passport){
 	 			else{
 	 				var user = new User();
 	 				user.username = username;
-	 				user.password = password;
+	 				user.password = user.hash(password);
 
 	 				user.save((err)=>{
 	 					if (err) {
@@ -53,7 +66,7 @@ module.exports = function(passport){
 			User.findOne({username:username}, (err, user)=>{
 				if (err) {return done(err);}
 				if (!user) {return done(null, false, req.flash('info', 'No Such User!'));}
-				if (!(user.password === password)) {return done(null, false ,req.flash('info','Wrong Password... Try Again? :)'));}
+				if (!(user.isValidPassword(password))) {return done(null, false ,req.flash('info','Wrong Password... Try Again? :)'));}
 				return done(null, user);
 			});
 		}
