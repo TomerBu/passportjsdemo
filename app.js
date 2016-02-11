@@ -11,8 +11,10 @@ var session = require('express-session');
 
 var config = require('./config/config.js');
 var routes = require('./routes/index')(passport);
+var auth = require('./auth/auth-passport.js')(passport);
 
 var app = express();
+
 
 //connect to db:
 mongoose.connect(config.DB_URL);
